@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MemeCrafter  </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🔥 MemeCrafter  </h1>
+        </header>
+
+        <!-- Topic Input Section -->
+        <section>
+            <form method="POST">
+                <input type="text" name="topic" class="input-topic" placeholder="Enter a topic (optional)">
+                <button type="submit" class="btn">Generate Meme</button>
+            </form>
+        </section>
+
+        <!-- Caption Selection Section -->
+        {% if captions %}
+        <section>
+            <h2>Select a Caption</h2>
+            <form method="POST">
+                <input type="hidden" name="topic" value="{{ request.form.topic }}">
+                <div class="caption-options">
+                    {% for c in captions %}
+                        <label class="caption-label">
+                            <input type="radio" name="selected_caption" value="{{ c }}" {% if loop.first %}checked{% endif %}>
+                            {{ c }}
+                        </label>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn">Generate Meme with Caption</button>
+            </form>
+        </section>
+        {% endif %}
+
+        <!-- Meme Output Section -->
+        {% if meme_url %}
+        <section class="meme-section">
+            <h2>Your Meme</h2>
+            <img src="{{ meme_url }}" alt="Generated Meme" class="meme-image">
+            <div class="caption-box"><strong>Caption:</strong> {{ used_caption }}</div>
+        </section>
+        {% elif used_caption %}
+        <section class="used-caption">
+            <p>{{ used_caption }}</p>
+        </section>
+        {% endif %}
+    </div>
+
+    <!-- JS Script -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
